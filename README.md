@@ -6,7 +6,7 @@ Reoccuring utility functions and scripts for ML on bioimages
 pip install git+https://github.com/bentaculum/bioimageutils.git
 ```
 
-### Contribute
+## Contribute
 Set up automatic pre-commit routines to contribute to this project:
 ```
 pre-commit install
