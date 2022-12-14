@@ -1,1 +1,1 @@
-import bioimageutils.img
+from .img import crop_borders
