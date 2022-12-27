@@ -1,1 +1,4 @@
-from .img import crop_borders
+from .img import (
+    crop_borders,
+    rescale_intensity,
+)

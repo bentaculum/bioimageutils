@@ -1,4 +1,8 @@
+import logging
+import numpy as np
 from skimage.util import img_as_ubyte
+
+logger = logging.getLogger(__name__)
 
 
 def crop_borders(x):
@@ -27,3 +31,50 @@ def crop_borders(x):
     row_start, row_end = mask1.argmax(), m - mask1[::-1].argmax()
 
     return x[row_start:row_end, col_start:col_end]
+
+
+def rescale_intensity(x, pmin=0.2, pmax=99.8, clip=False, eps=1e-10, axis=None, subsample=1):
+    """Rescale intensity values with percentile-based min and max.
+
+    Parameters
+    ----------
+    x : np.ndarray
+        N-dimensional image.
+    pmin : float
+        This percentile value gets mapped to 0.
+    pmax : float
+        This percentile value gets mapped to 1.
+    clip : bool
+        If True, output is clipped to (0,1).
+    eps : float
+        Additive term for denominator to avoid division by 0.
+    axis : int or tuple of ints
+        Axes along which the intensities are rescaled.
+        The default is to rescale along a flattened version of the array.
+    subsample : int
+        If subsample > 1, use a fraction for percentile calculation (faster).
+
+    Returns
+    -------
+    image: np.ndarray
+        float32
+    """
+    x = np.array(x, dtype=np.float32, copy=False)
+
+    if axis is None:
+        axis = tuple(range(x.ndim))
+    if isinstance(axis, int):
+        axis = (np.arange(x.ndim)[axis],)
+
+    subslice = tuple(slice(0, None, subsample) if i in axis else slice(None) for i in tuple(range(x.ndim)))
+
+    mi, ma = np.percentile(x[subslice], (pmin, pmax), axis=axis, keepdims=True)
+    logger.debug(f"Min intensity (at p={pmin/100}) = {mi}")
+    logger.debug(f"Max intensity (at p={pmax/100}) = {ma}")
+
+    x = (x - mi) / (ma - mi + eps)
+
+    if clip:
+        x = np.clip(x, 0, 1)
+
+    return x.astype(np.float32, copy=False)
