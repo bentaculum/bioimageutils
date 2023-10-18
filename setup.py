@@ -12,6 +12,8 @@ setup(
     install_requires=[
         "pre-commit",
         "pytest",
+        "black",
         "numpy",
+        "scikit-image",
     ],
 )

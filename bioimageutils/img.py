@@ -33,7 +33,9 @@ def crop_borders(x):
     return x[row_start:row_end, col_start:col_end]
 
 
-def rescale_intensity(x, pmin=0.2, pmax=99.8, clip=False, eps=1e-10, axis=None, subsample=1):
+def rescale_intensity(
+    x, pmin=0.2, pmax=99.8, clip=False, eps=1e-10, axis=None, subsample=1
+):
     """Rescale intensity values with percentile-based min and max.
 
     Parameters
@@ -66,7 +68,10 @@ def rescale_intensity(x, pmin=0.2, pmax=99.8, clip=False, eps=1e-10, axis=None, 
     if isinstance(axis, int):
         axis = (np.arange(x.ndim)[axis],)
 
-    subslice = tuple(slice(0, None, subsample) if i in axis else slice(None) for i in tuple(range(x.ndim)))
+    subslice = tuple(
+        slice(0, None, subsample) if i in axis else slice(None)
+        for i in tuple(range(x.ndim))
+    )
 
     mi, ma = np.percentile(x[subslice], (pmin, pmax), axis=axis, keepdims=True)
     logger.debug(f"Min intensity (at p={pmin/100}) = {mi}")
