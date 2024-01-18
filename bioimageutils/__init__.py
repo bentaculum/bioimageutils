@@ -8,3 +8,4 @@ from .img import (
 )
 
 from .segmentation import expand_labels
+from .load_tiffs import load_tiffs
