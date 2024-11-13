@@ -15,5 +15,6 @@ setup(
         "black",
         "numpy",
         "scikit-image",
+        "dask",
     ],
 )
