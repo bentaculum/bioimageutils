@@ -61,7 +61,7 @@ def rescale_intensity(
     image: np.ndarray
         float32
     """
-    x = np.array(x, dtype=np.float32, copy=False)
+    x = np.asarray(x, dtype=np.float32)
 
     if axis is None:
         axis = tuple(range(x.ndim))
